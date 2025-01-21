@@ -29,4 +29,27 @@ class VisiteRepository extends ServiceEntityRepository
                 ->getResult();
                          
     }
+    
+    
+    /**
+     * Enregistrement dont un champ est égal a une valeur. Ou tous les enregistrement si valeur vide
+     * @param type $champ
+     * @param type $valeur
+     * @return Visite[]
+     */
+    public function findByEqualValue($champ, $valeur): array {
+        if($valeur==""){
+            return $this->createQueryBuilder('v') //alias de la table
+                    ->orderBy('v.'.$champ,'ASC')
+                    ->getQuery()
+                    ->getResult();
+        }else{
+            return $this->createQueryBuilder('v')
+                    ->where('v.'.$champ.'=:valeur')
+                    ->setParameter('valeur', $valeur)
+                    ->orderBy('v.datecreation','DESC')
+                    ->getQuery()
+                    ->getResult();
+        }
+    }
 }
